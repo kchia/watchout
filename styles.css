@@ -3,17 +3,14 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 svg {
-  background-color:gray;
+  background-color:black;
 }
 
 .player {
-  fill: lightsteelblue;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+  fill: white;
 
 }
 
-.player.dragging {
-  fill: blue;
-  stroke: brown;
+.enemy {
+  fill:maroon
 }
