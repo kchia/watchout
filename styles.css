@@ -11,6 +11,15 @@ svg {
 
 }
 
-.enemy {
-  fill:maroon
+.enemy{
+    -webkit-animation: spin .4s linear infinite;
+    transform-origin: 50% 50%;
+}
+@-webkit-keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

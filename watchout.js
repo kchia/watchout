@@ -12,6 +12,8 @@ var collisions = 0;
 var high = 0;
 var current = 0;
 
+// var explosion;
+
 
 var svg = d3.select("body").append("svg")
   .attr("width",width).attr("height",height);
@@ -22,9 +24,14 @@ var player = svg.selectAll("circle").data([{x:width/2,y:height/2}]).enter().appe
 
 var enemyPositions = d3.range(numEnemies).map(randomPosition);
 
-var enemies = svg.selectAll("circle").data(enemyPositions).enter().append("circle")
-  .attr("r", circleSize).attr("cx",function(d) { return d.x; }).attr("cy",function(d) { return d.y; })
-  .classed("enemy",true);
+// var enemies = svg.selectAll("circle").data(enemyPositions).enter().append("circle")
+//   .attr("r", circleSize).attr("cx",function(d) { return d.x; }).attr("cy",function(d) { return d.y; })
+//   .classed("enemy",true);
+
+var enemies = svg.selectAll(".enemy").data(enemyPositions).enter().append("image")
+  .attr("xlink:href", "shuriken.png").attr("x", function(d) {return d.x;}).attr("y",function(d) {return d.y;})
+  .classed("enemy",true).attr("height","50px").attr("width","50px");
+
 
 var drag = d3.behavior.drag()
     .on("dragstart", dragstarted)
@@ -80,7 +87,7 @@ function dragended(d) {
 
 setInterval(function(){
   enemyPositions = enemyPositions.map(randomPosition);
-  svg.selectAll(".enemy").data(enemyPositions).transition().duration(speed).attr("cx",function(d) { return d.x; }).attr("cy",function(d) { return d.y; });
+  svg.selectAll(".enemy").data(enemyPositions).transition().duration(speed).attr("x",function(d) { return d.x; }).attr("y",function(d) { return d.y; });
 }, wait);
 
 
@@ -89,12 +96,12 @@ setInterval(function(){
 setInterval(function(){
   // Check each enemy to see if its position is within 2r of the player's center
   svg.selectAll(".enemy").each(function(){
-    var enemyX = d3.select(this).attr("cx");
-    var enemyY = d3.select(this).attr("cy");
+    var enemyX = d3.select(this).attr("x") + 50/2;
+    var enemyY = d3.select(this).attr("y") + 50/2;
     var playerX = player.attr("cx");
     var playerY = player.attr("cy");
     var distance = Math.sqrt(Math.pow(enemyX - playerX,2) + Math.pow(enemyY - playerY,2));
-    if(distance < 2 * circleSize){
+    if(distance < circleSize + 50/2){
       collide();
     }
 });
@@ -107,13 +114,23 @@ setInterval(function(){
 },500)
 
 var collide = _.throttle(function(){
+  // player.style("visibility","hidden");
+  // explosion = svg.append("image").attr("xlink:href", "hypersplash.gif")
+  // .classed(".explosion",true).attr("x",player.attr("cx")-32).attr("y",player.attr("cy")-32).attr("height","64px").attr("width","64px");
+  //  setTimeout(restorePlayer,1400);
   collisions++;
   high = current > high ? current : high;
   current = 0;
   d3.select(".collisions").select('span').text(collisions);
   d3.select(".high").select('span').text(high);
   d3.select(".current").select('span').text(current);
-}, 1000, {trailing: false});
+}, 1500, {trailing: false});
+
+ // var restorePlayer = function() {
+ //    explosion.remove();
+ //    // explosion.style("visibility","hidden");
+ //    // player.style("visibility","visible");
+ // }
 //set up player class
 //set up enemies class
 //render the player and enemies
